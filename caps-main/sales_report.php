@@ -378,24 +378,24 @@ $detailedBookings = $detailedBookingsQuery->fetchAll(PDO::FETCH_ASSOC);
                             <td>
                                 <?php
                                 $t = trim($b['appointment_time']);
-                                $formatted = $t;
-                                $ampm = '';
-                                if (preg_match('/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i', $t, $m)) {
-                                    $formatted = $m[1] . ':' . $m[2];
-                                    $ampm = strtolower($m[3]);
-                                } elseif (preg_match('/^\d{1,2}:\d{2}$/', $t)) {
-                                    $timeObj = DateTime::createFromFormat('H:i', $t);
-                                    if ($timeObj) {
-                                        $formatted = $timeObj->format('g:i');
-                                        $ampm = strtolower($timeObj->format('A'));
-                                    }
-                                }
-                                echo htmlspecialchars($formatted);
-                                if ($ampm) {
-                                    $color = $ampm === 'pm' ? 'bg-yellow-500' : 'bg-green-500';
-                                    echo "<span class='inline-block ml-1 px-1.5 py-0.5 text-xs font-bold rounded text-white $color'>$ampm</span>";
-                                }
-                                ?>
+                        $formatted = $t;
+                        $ampm = '';
+                        if (preg_match('/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i', $t, $m)) {
+                            $formatted = $m[1] . ':' . $m[2];
+                            $ampm = strtolower($m[3]);
+                        } elseif (preg_match('/^\d{1,2}:\d{2}$/', $t)) {
+                            $timeObj = DateTime::createFromFormat('H:i', $t);
+                            if ($timeObj) {
+                                $formatted = $timeObj->format('g:i');
+                                $ampm = strtolower($timeObj->format('A'));
+                            }
+                        }
+                        echo htmlspecialchars($formatted);
+                        if ($ampm) {
+                            $color = $ampm === 'pm' ? 'bg-yellow-500' : 'bg-green-500';
+                            echo "<span class='inline-block ml-1 px-1.5 py-0.5 text-xs font-bold rounded text-white $color'>$ampm</span>";
+                        }
+                        ?>
                             </td>
                             <td><span class="status-badge status-<?= strtolower(str_replace(' ', '', $b['status'])) ?>"><?= $b['status'] ?></span></td>
                         </tr>
@@ -416,8 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = <?= json_encode([
         'labels' => array_column($bookingsByStatus, 'status'),
         'data' => array_column($bookingsByStatus, 'count'),
-        'colors' => array_map(fn($s) => [
-            'Completed'=>'#10b981','Pending'=>'#f59e0b','Cancelled'=>'#ef4444','In Progress'=>'#f59e0b'
+        'colors' => array_map(fn ($s) => [
+            'Completed' => '#10b981','Pending' => '#f59e0b','Cancelled' => '#ef4444','In Progress' => '#f59e0b'
         ][$s['status']] ?? '#6b7280', $bookingsByStatus)
     ]) ?>;
     new Chart(ctx, {
@@ -432,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('monthlySalesChart').getContext('2d');
     const data = <?= json_encode([
-        'labels' => array_map(fn($m) => date('M Y', strtotime($m . '-01')), array_keys($monthlySales)),
+        'labels' => array_map(fn ($m) => date('M Y', strtotime($m . '-01')), array_keys($monthlySales)),
         'data' => array_values($monthlySales)
     ]) ?>;
     new Chart(ctx, {

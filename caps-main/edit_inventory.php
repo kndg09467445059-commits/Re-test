@@ -309,12 +309,14 @@ while ($row = $service_query->fetch_assoc()) {
     <div class="form-card">
         <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert-success">
-                <i class="bi bi-check-circle"></i> <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                <i class="bi bi-check-circle"></i> <?= htmlspecialchars($_SESSION['success']);
+            unset($_SESSION['success']); ?>
             </div>
         <?php endif; ?>
         <?php if (isset($_SESSION['error'])): ?>
             <div class="alert alert-danger">
-                <i class="bi bi-exclamation-circle"></i> <?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                <i class="bi bi-exclamation-circle"></i> <?= htmlspecialchars($_SESSION['error']);
+            unset($_SESSION['error']); ?>
             </div>
         <?php endif; ?>
 

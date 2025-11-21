@@ -2,7 +2,9 @@
 session_start();
 require 'config.php';
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-if ($conn->connect_error) die("DB failed: " . $conn->connect_error);
+if ($conn->connect_error) {
+    die("DB failed: " . $conn->connect_error);
+}
 
 $search_service = isset($_GET['service']) ? trim($_GET['service']) : '';
 $search_ingredient = isset($_GET['ingredient']) ? trim($_GET['ingredient']) : '';
@@ -69,10 +71,10 @@ $start_month = (int)date('n'); // current month (1-12)
 $start_year = (int)date('Y');
 
 for ($i = 0; $i < $period_count; $i++) {
-    $month1 = ($start_month + $i*3 - 1) % 12;
-    $year1 = $start_year + floor(($start_month + $i*3 - 1)/12);
+    $month1 = ($start_month + $i * 3 - 1) % 12;
+    $year1 = $start_year + floor(($start_month + $i * 3 - 1) / 12);
     $month2 = ($month1 + 2) % 12;
-    $year2 = $year1 + floor(($month1 + 2)/12);
+    $year2 = $year1 + floor(($month1 + 2) / 12);
 
     $rotation_periods[] = $month_names[$month1] . " " . $year1 . " - " . $month_names[$month2] . " " . $year2;
 }

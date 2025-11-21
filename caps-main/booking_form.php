@@ -10,7 +10,8 @@ try {
 }
 
 // CRITICAL HELPER: Clean price string
-function clean_price($price) {
+function clean_price($price)
+{
     return (float)preg_replace('/[^\d.]/', '', $price);
 }
 
@@ -238,9 +239,9 @@ if (isset($_POST['submit_booking'])) {
     if ($structure_type === 'Other') {
         $structure_type = isset($_POST['structure_type_other']) ? htmlspecialchars(ucwords(strtolower(trim($_POST['structure_type_other'])))) : '';
         if (empty($structure_type)) {
-        $_SESSION['error'] = "Please specify the structure type for 'Other'.";
-        header("Location: booking_form.php");
-        exit();
+            $_SESSION['error'] = "Please specify the structure type for 'Other'.";
+            header("Location: booking_form.php");
+            exit();
         }
     }
 
@@ -594,22 +595,24 @@ foreach ($price_ranges as $pr) {
             <div class="card-header">Book Your Service</div>
             <div class="card-body">
                 <?php if (isset($_SESSION['error'])): ?>
-                    <div class="alert alert-error"><?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
+                    <div class="alert alert-error"><?= htmlspecialchars($_SESSION['error']);
+                    unset($_SESSION['error']); ?></div>
                 <?php endif; ?>
                 <?php if (isset($_SESSION['success'])): ?>
-                    <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
+                    <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success']);
+                    unset($_SESSION['success']); ?></div>
                 <?php endif; ?>
 
                 <?php
                 $has_available_services = false;
-                foreach ($services_status as $service) {
-                    if ($service['available']) {
-                        $has_available_services = true;
-                        break;
-                    }
-                }
-                if (!$has_available_services):
-                ?>
+foreach ($services_status as $service) {
+    if ($service['available']) {
+        $has_available_services = true;
+        break;
+    }
+}
+if (!$has_available_services):
+    ?>
                     <div class="alert alert-warning">No services are currently available due to insufficient inventory or expired items. Please contact support at support@pestcontrol.com for assistance.</div>
                 <?php else: ?>
                     <form method="post" class="grid grid-cols-1 md:grid-cols-2 gap-8" id="bookingForm">
@@ -618,14 +621,18 @@ foreach ($price_ranges as $pr) {
                             <select name="service_type" class="form-select" required onchange="fetchServiceDetails(this.value)">
                                 <option value="">-- Choose Your Service --</option>
                                 <?php
-                                foreach ($services_status as $service) {
-                                    $label = $service['name'];
-                                    if ($service['is_rotated']) $label .= ' (Recommended)';
-                                    if (!$service['available']) $label .= ' (Currently Unavailable)';
-                                    $disabled = $service['available'] ? '' : 'disabled';
-                                    echo "<option value='" . htmlspecialchars($service['name']) . "' $disabled>" . htmlspecialchars($label) . "</option>";
-                                }
-                                ?>
+                    foreach ($services_status as $service) {
+                        $label = $service['name'];
+                        if ($service['is_rotated']) {
+                            $label .= ' (Recommended)';
+                        }
+                        if (!$service['available']) {
+                            $label .= ' (Currently Unavailable)';
+                        }
+                        $disabled = $service['available'] ? '' : 'disabled';
+                        echo "<option value='" . htmlspecialchars($service['name']) . "' $disabled>" . htmlspecialchars($label) . "</option>";
+                    }
+                    ?>
                             </select>
                         </div>
 
@@ -703,15 +710,15 @@ foreach ($price_ranges as $pr) {
                             <select name="appointment_time" class="form-select" required>
                                 <option value="">-- Select Time Slot --</option>
                                 <?php
-                                for ($hour = 6; $hour <= 23; $hour++) {
-                                    $formatted = date("g:i A", strtotime("$hour:00"));
-                                    echo "<option value='$formatted'>$formatted</option>";
-                                    if ($hour < 23) {
-                                        $formatted = date("g:i A", strtotime("$hour:30"));
-                                        echo "<option value='$formatted'>$formatted</option>";
-                                    }
-                                }
-                                ?>
+                    for ($hour = 6; $hour <= 23; $hour++) {
+                        $formatted = date("g:i A", strtotime("$hour:00"));
+                        echo "<option value='$formatted'>$formatted</option>";
+                        if ($hour < 23) {
+                            $formatted = date("g:i A", strtotime("$hour:30"));
+                            echo "<option value='$formatted'>$formatted</option>";
+                        }
+                    }
+                    ?>
                             </select>
                         </div>
 
@@ -727,14 +734,14 @@ foreach ($price_ranges as $pr) {
                             <label class="form-label">Property Type</label>
                             <div class="structure-options">
                                 <?php
-                                $options = ['Residential', 'Commercial', 'Restaurant', 'Plant', 'Warehouse', 'Building', 'Bank', 'School'];
-                                foreach ($options as $opt) {
-                                    echo '<div class="structure-option">
+                    $options = ['Residential', 'Commercial', 'Restaurant', 'Plant', 'Warehouse', 'Building', 'Bank', 'School'];
+                    foreach ($options as $opt) {
+                        echo '<div class="structure-option">
                                             <input type="radio" name="structure_type" value="' . htmlspecialchars($opt) . '" id="' . htmlspecialchars($opt) . '">
                                             <label class="structure-option-label" for="' . htmlspecialchars($opt) . '">' . htmlspecialchars($opt) . '</label>
                                           </div>';
-                                }
-                                ?>
+                    }
+                    ?>
                                 <div class="structure-option">
                                     <input type="radio" id="otherCheckbox" name="structure_type" value="Other">
                                     <label class="structure-option-label" for="otherCheckbox">Other</label>
@@ -835,15 +842,23 @@ foreach ($price_ranges as $pr) {
                                 <td><?= htmlspecialchars(str_replace('PHP', '₱', $booking['price_range'])) ?></td>
                                 <td>
                                     <?php
-                                    $status = $booking['status'];
-                                    $badge_class = $icon = '';
-                                    switch ($status) {
-                                        case 'Pending': $badge_class = 'bg-yellow-100 text-yellow-800'; $icon = 'fa-clock'; break;
-                                        case 'Confirmed': $badge_class = 'bg-green-100 text-green-800'; $icon = 'fa-check-circle'; break;
-                                        case 'Cancelled': $badge_class = 'bg-red-100 text-red-800'; $icon = 'fa-times-circle'; break;
-                                        case 'Completed': $badge_class = 'bg-blue-100 text-blue-800'; $icon = 'fa-check-double'; break;
-                                    }
-                                    ?>
+                        $status = $booking['status'];
+                            $badge_class = $icon = '';
+                            switch ($status) {
+                                case 'Pending': $badge_class = 'bg-yellow-100 text-yellow-800';
+                                    $icon = 'fa-clock';
+                                    break;
+                                case 'Confirmed': $badge_class = 'bg-green-100 text-green-800';
+                                    $icon = 'fa-check-circle';
+                                    break;
+                                case 'Cancelled': $badge_class = 'bg-red-100 text-red-800';
+                                    $icon = 'fa-times-circle';
+                                    break;
+                                case 'Completed': $badge_class = 'bg-blue-100 text-blue-800';
+                                    $icon = 'fa-check-double';
+                                    break;
+                            }
+                            ?>
                                     <span class="badge <?= $badge_class ?>">
                                         <i class="fas <?= $icon ?>"></i> <?= htmlspecialchars($status) ?>
                                     </span>
