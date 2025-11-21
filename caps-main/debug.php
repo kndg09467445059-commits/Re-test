@@ -1501,27 +1501,29 @@ foreach ($all_services as $service) {
                 <?php if (isset($_SESSION['error'])): ?>
                     <div class="alert alert-error">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                        <?= htmlspecialchars($_SESSION['error']);
+                    unset($_SESSION['error']); ?>
                     </div>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION['success'])): ?>
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle"></i>
-                        <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                        <?= htmlspecialchars($_SESSION['success']);
+                    unset($_SESSION['success']); ?>
                     </div>
                 <?php endif; ?>
 
                 <?php
                 $has_available_services = false;
-                foreach ($services_status as $service) {
-                    if ($service['available']) {
-                        $has_available_services = true;
-                        break;
-                    }
-                }
-                if (!$has_available_services):
-                ?>
+foreach ($services_status as $service) {
+    if ($service['available']) {
+        $has_available_services = true;
+        break;
+    }
+}
+if (!$has_available_services):
+    ?>
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-circle"></i>
                         No services are currently available due to insufficient inventory or expired items. Please contact support at support@pestcontrol.com for assistance.
@@ -1543,15 +1545,15 @@ foreach ($all_services as $service) {
                             <select name="service_type" class="form-select" required onchange="fetchServiceDetails(this.value)">
                                 <option value="">-- Choose Your Service --</option>
                                 <?php
-                                foreach ($services_status as $service) {
-                                    $label = $service['name'];
-                                    if (!$service['available']) {
-                                        $label .= ' (Currently Unavailable)';
-                                    }
-                                    $disabled = $service['available'] ? '' : 'disabled';
-                                    echo "<option value='" . htmlspecialchars($service['name']) . "' $disabled>" . htmlspecialchars($label) . "</option>";
-                                }
-                                ?>
+                    foreach ($services_status as $service) {
+                        $label = $service['name'];
+                        if (!$service['available']) {
+                            $label .= ' (Currently Unavailable)';
+                        }
+                        $disabled = $service['available'] ? '' : 'disabled';
+                        echo "<option value='" . htmlspecialchars($service['name']) . "' $disabled>" . htmlspecialchars($label) . "</option>";
+                    }
+                    ?>
                             </select>
                             <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin'): ?>
                                 <small class="text-gray-500 mt-2 block">
@@ -1592,15 +1594,15 @@ foreach ($all_services as $service) {
                             <select name="appointment_time" class="form-select" required>
                                 <option value="">-- Select Time Slot --</option>
                                 <?php
-                                for ($hour = 6; $hour <= 23; $hour++) {
-                                    $formatted = date("g:i A", strtotime("$hour:00"));
-                                    echo "<option value='$formatted'>$formatted</option>";
-                                    if ($hour < 23) {
-                                        $formatted = date("g:i A", strtotime("$hour:30"));
-                                        echo "<option value='$formatted'>$formatted</option>";
-                                    }
-                                }
-                                ?>
+                    for ($hour = 6; $hour <= 23; $hour++) {
+                        $formatted = date("g:i A", strtotime("$hour:00"));
+                        echo "<option value='$formatted'>$formatted</option>";
+                        if ($hour < 23) {
+                            $formatted = date("g:i A", strtotime("$hour:30"));
+                            echo "<option value='$formatted'>$formatted</option>";
+                        }
+                    }
+?>
                             </select>
                         </div>
 
@@ -1620,14 +1622,14 @@ foreach ($all_services as $service) {
                             </label>
                             <div class="structure-options">
                                 <?php
-                                $options = ['Residential', 'Commercial', 'Restaurant', 'Plant', 'Warehouse', 'Building', 'Bank', 'School'];
-                                foreach ($options as $opt) {
-                                    echo '<div class="structure-option">
+$options = ['Residential', 'Commercial', 'Restaurant', 'Plant', 'Warehouse', 'Building', 'Bank', 'School'];
+foreach ($options as $opt) {
+    echo '<div class="structure-option">
                                             <input type="radio" name="structure_type" value="' . htmlspecialchars($opt) . '" id="' . htmlspecialchars($opt) . '">
                                             <label class="structure-option-label" for="' . htmlspecialchars($opt) . '">' . htmlspecialchars($opt) . '</label>
                                           </div>';
-                                }
-                                ?>
+}
+?>
                                 <div class="structure-option">
                                     <input type="radio" id="otherCheckbox" name="structure_type" value="Other">
                                     <label class="structure-option-label" for="otherCheckbox">Other</label>
@@ -1776,8 +1778,8 @@ foreach ($all_services as $service) {
                                     <td>
                                         <span class="badge
                                             <?= $booking['status'] === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                                                ($booking['status'] === 'Completed' ? 'bg-green-100 text-green-800' :
-                                                ($booking['status'] === 'Cancelled' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800')) ?>">
+                ($booking['status'] === 'Completed' ? 'bg-green-100 text-green-800' :
+                ($booking['status'] === 'Cancelled' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800')) ?>">
                                             <?php if ($booking['status'] === 'Pending'): ?>
                                                 <i class="fas fa-clock"></i>
                                             <?php elseif ($booking['status'] === 'Completed'): ?>
@@ -1822,11 +1824,11 @@ foreach ($all_services as $service) {
         const priceRangesMap = <?php echo json_encode($price_ranges_map); ?>;
         const serviceIdMap = <?php
             $service_id_map = [];
-            foreach ($services_status as $service) {
-                $service_id_map[$service['name']] = $service['service_id'];
-            }
-            echo json_encode($service_id_map);
-        ?>;
+foreach ($services_status as $service) {
+    $service_id_map[$service['name']] = $service['service_id'];
+}
+echo json_encode($service_id_map);
+?>;
 
         // Create floating particles
         function createParticles() {

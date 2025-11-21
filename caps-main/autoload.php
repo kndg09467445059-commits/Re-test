@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require 'vendor/autoload.php';
 require 'config.php';
@@ -87,4 +88,3 @@ if ($action === 'verify_code') {
 }
 
 echo json_encode(['success' => false, 'error' => 'Invalid action.']);
-?>

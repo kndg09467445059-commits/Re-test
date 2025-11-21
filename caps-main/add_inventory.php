@@ -97,9 +97,11 @@ body { background: linear-gradient(135deg, var(--dark), #1a5c38); color: #fff; m
         </div>
 
         <?php if (!empty($_SESSION['success'])): ?>
-            <div class="alert alert-success text-center"><?= $_SESSION['success']; unset($_SESSION['success']); ?></div>
+            <div class="alert alert-success text-center"><?= $_SESSION['success'];
+            unset($_SESSION['success']); ?></div>
         <?php elseif (!empty($_SESSION['error'])): ?>
-            <div class="alert alert-danger text-center"><?= $_SESSION['error']; unset($_SESSION['error']); ?></div>
+            <div class="alert alert-danger text-center"><?= $_SESSION['error'];
+            unset($_SESSION['error']); ?></div>
         <?php endif; ?>
 
         <form method="POST" id="addForm" class="row g-4">

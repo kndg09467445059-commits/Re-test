@@ -1,4 +1,5 @@
 <?php
+
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'inventory');
@@ -19,4 +20,3 @@ define('SMTP_USERNAME', 'your-email@gmail.com'); // Replace with your Gmail addr
 define('SMTP_PASSWORD', 'your-app-password-here'); // Replace with your Gmail App Password
 define('SMTP_FROM_EMAIL', 'your-email@gmail.com'); // Replace with your Gmail address
 define('SMTP_FROM_NAME', 'Techno Pest Control');
-?>

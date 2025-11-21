@@ -41,8 +41,8 @@ $inventory = $pdo->query("
 ")->fetchAll();
 
 /* ==================== CURRENT CHEMICALS ==================== */
-$termite_items = array_filter($inventory, fn($i)=>in_array(trim($i['active_ingredient'] ?? ''), $termite_ingredients));
-$pest_items    = array_filter($inventory, fn($i)=>in_array(trim($i['active_ingredient'] ?? ''), $pest_control_ingredients));
+$termite_items = array_filter($inventory, fn ($i) => in_array(trim($i['active_ingredient'] ?? ''), $termite_ingredients));
+$pest_items    = array_filter($inventory, fn ($i) => in_array(trim($i['active_ingredient'] ?? ''), $pest_control_ingredients));
 
 $current_termite = !empty($termite_items)
     ? array_values($termite_items)[$rotation_period % count($termite_items)]['active_ingredient']
@@ -53,8 +53,8 @@ $current_pest = !empty($pest_items)
     : 'None Selected';
 
 /* ==================== STOCK ALERTS ==================== */
-$low_stock_items = array_filter($inventory, fn($i) => (float)$i['stocks'] < 10);
-$empty_items     = array_filter($inventory, fn($i) => (float)$i['stocks'] <= 0);
+$low_stock_items = array_filter($inventory, fn ($i) => (float)$i['stocks'] < 10);
+$empty_items     = array_filter($inventory, fn ($i) => (float)$i['stocks'] <= 0);
 
 $has_low  = !empty($low_stock_items);
 $has_empty = !empty($empty_items);
@@ -273,13 +273,13 @@ $alert_count = count($low_stock_items);
                         $stock = (float)$item['stocks'];
                         $icon = $stock <= 0 ? 'bi-x-octagon-fill' : 'bi-exclamation-triangle-fill';
                         $color = $stock <= 0 ? 'danger' : 'warning';
-                    ?>
+                        ?>
                     <div class="col-lg-3 col-md-4 col-6">
                         <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm">
                             <i class="bi <?= $icon ?> text-<?= $color ?> fs-3"></i>
                             <div>
                                 <div class="fw-bold small text-dark"><?= htmlspecialchars($item['active_ingredient'] ?: $item['service_name']) ?></div>
-                                <div class="text-muted small"><?= number_format($stock,1) ?> bottle<?= $stock==1?'':'s' ?></div>
+                                <div class="text-muted small"><?= number_format($stock, 1) ?> bottle<?= $stock == 1 ? '' : 's' ?></div>
                             </div>
                         </div>
                     </div>
@@ -342,15 +342,15 @@ $alert_count = count($low_stock_items);
                 $near_exp = !empty($i['expiry_date']) && strtotime($i['expiry_date']) < strtotime('+1 month') && !$is_expired;
                 $exp_display = !empty($i['expiry_date']) ? date('Y-m-d', strtotime($i['expiry_date'])) : '';
                 $ingredient = ucwords(strtolower($i['active_ingredient'] ?? ''));
-            ?>
-            <tr class="<?= $is_expired || $stock<=0 ? 'table-danger' : ($stock<10 ? 'table-warning' : '') ?>">
+                ?>
+            <tr class="<?= $is_expired || $stock <= 0 ? 'table-danger' : ($stock < 10 ? 'table-warning' : '') ?>">
                 <td class="fw-semibold"><?= htmlspecialchars($i['service_name']) ?></td>
                 <td><?= htmlspecialchars($ingredient ?: '—') ?></td>
                 <td class="text-center">
-                    <?= number_format($stock,1) ?>
-                    <?php if($stock<=0): ?>
+                    <?= number_format($stock, 1) ?>
+                    <?php if ($stock <= 0): ?>
                         <span class="badge bg-danger ms-2">EMPTY</span>
-                    <?php elseif($stock<10): ?>
+                    <?php elseif ($stock < 10): ?>
                         <span class="badge bg-warning text-dark ms-2">LOW</span>
                     <?php else: ?>
                         <span class="badge bg-success ms-2">OK</span>
@@ -358,17 +358,17 @@ $alert_count = count($low_stock_items);
                 </td>
                 <td class="text-center">
                     <?= $exp_display ?: '—' ?>
-                    <?php if($is_expired): ?>
+                    <?php if ($is_expired): ?>
                         <span class="badge bg-danger ms-2">EXPIRED</span>
-                    <?php elseif($near_exp): ?>
+                    <?php elseif ($near_exp): ?>
                         <span class="badge bg-warning text-dark ms-2">NEAR EXP</span>
                     <?php endif; ?>
                 </td>
                 <td><code><?= htmlspecialchars($i['barcode'] ?? '—') ?></code></td>
                 <td class="text-center">
-                    <?php if($is_expired || $stock<=0): ?>
+                    <?php if ($is_expired || $stock <= 0): ?>
                         <i class="bi bi-x-circle-fill text-danger fs-4"></i>
-                    <?php elseif($stock<10): ?>
+                    <?php elseif ($stock < 10): ?>
                         <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i>
                     <?php else: ?>
                         <i class="bi bi-check-circle-fill text-success fs-4"></i>
@@ -395,7 +395,7 @@ $alert_count = count($low_stock_items);
                 </td>
             </tr>
             <?php endforeach; ?>
-            <?php if(empty($inventory)): ?>
+            <?php if (empty($inventory)): ?>
             <tr><td colspan="7" class="text-center py-6 text-muted fs-4">No inventory items yet.</td></tr>
             <?php endif; ?>
             </tbody>

@@ -140,7 +140,8 @@ if (isset($_POST['download_receipt']) && isset($_POST['reference_code'])) {
 
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success">
-            <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+            <?= htmlspecialchars($_SESSION['success']);
+        unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
 

@@ -51,7 +51,7 @@ if (isset($_GET['calendar']) && $_GET['calendar'] == 'events') {
             'id'    => $row['booking_id'],
             'title' => $title,
             'start' => $row['date'],
-            'allDay'=> true,
+            'allDay' => true,
             'color' => $color,
             'extendedProps' => [
                 'reference' => $row['reference_code'],
@@ -70,8 +70,11 @@ if (isset($_GET['calendar']) && $_GET['calendar'] == 'events') {
 $success_message = '';
 $error_message = '';
 
-function validatePriceRange($price_range) {
-    if (!preg_match('/^\d+-\d+$/', $price_range)) return false;
+function validatePriceRange($price_range)
+{
+    if (!preg_match('/^\d+-\d+$/', $price_range)) {
+        return false;
+    }
     list($min, $max) = explode('-', $price_range);
     return is_numeric($min) && is_numeric($max) && $min < $max;
 }
@@ -108,7 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Delete Service
         if (isset($_POST['delete_service'])) {
             $service_id = $_POST['service_id'];
-            if (!$service_id) throw new Exception("Service ID is missing.");
+            if (!$service_id) {
+                throw new Exception("Service ID is missing.");
+            }
             $stmt = $pdo->prepare("SELECT service_name FROM services WHERE service_id = ?");
             $stmt->execute([$service_id]);
             $service = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -125,8 +130,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $service_id = $_POST['service_id'];
             $price_range = trim($_POST['price_range']);
             $price = floatval($_POST['price']);
-            if (!validatePriceRange($price_range)) throw new Exception("Invalid price range format. Use 'X-Y'.");
-            if ($price <= 0) throw new Exception("Price must be positive.");
+            if (!validatePriceRange($price_range)) {
+                throw new Exception("Invalid price range format. Use 'X-Y'.");
+            }
+            if ($price <= 0) {
+                throw new Exception("Price must be positive.");
+            }
             $stmt = $pdo->prepare("INSERT INTO service_price_ranges (service_id, price_range, price) VALUES (?, ?, ?)");
             $stmt->execute([$service_id, $price_range, $price]);
             $success_message = "Price range '$price_range SQM - ₱" . number_format($price, 2) . "' added!";
@@ -137,8 +146,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $price_range_id = $_POST['price_range_id'];
             $price_range = trim($_POST['price_range']);
             $price = floatval($_POST['price']);
-            if (!validatePriceRange($price_range)) throw new Exception("Invalid price range format.");
-            if ($price <= 0) throw new Exception("Price must be positive.");
+            if (!validatePriceRange($price_range)) {
+                throw new Exception("Invalid price range format.");
+            }
+            if ($price <= 0) {
+                throw new Exception("Price must be positive.");
+            }
             $stmt = $pdo->prepare("UPDATE service_price_ranges SET price_range = ?, price = ? WHERE price_range_id = ?");
             $stmt->execute([$price_range, $price, $price_range_id]);
             $success_message = "Price range '$price_range SQM - ₱" . number_format($price, 2) . "' updated!";
@@ -147,7 +160,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Delete Price
         if (isset($_POST['delete_price'])) {
             $price_range_id = $_POST['price_range_id'];
-            if (!$price_range_id) throw new Exception("Price range ID missing.");
+            if (!$price_range_id) {
+                throw new Exception("Price range ID missing.");
+            }
             $stmt = $pdo->prepare("DELETE FROM service_price_ranges WHERE price_range_id = ?");
             $stmt->execute([$price_range_id]);
             $success_message = "Price range deleted!";
@@ -346,42 +361,43 @@ foreach ($services as $service) {
                                 <td>
                                     <?php
                                     $t = trim($r['appointment_time']);
-                                    $formatted = $t;
-                                    $ampm = '';
+                            $formatted = $t;
+                            $ampm = '';
 
-                                    if (preg_match('/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i', $t, $m)) {
-                                        $formatted = $m[1] . ':' . $m[2];
-                                        $ampm = strtolower($m[3]);
-                                    } elseif (preg_match('/^\d{1,2}:\d{2}$/', $t)) {
-                                        $timeObj = DateTime::createFromFormat('H:i', $t);
-                                        if ($timeObj) {
-                                            $formatted = $timeObj->format('g:i');
-                                            $ampm = strtolower($timeObj->format('A'));
-                                        }
-                                    } else {
-                                        $formatted = htmlspecialchars($t);
-                                    }
+                            if (preg_match('/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i', $t, $m)) {
+                                $formatted = $m[1] . ':' . $m[2];
+                                $ampm = strtolower($m[3]);
+                            } elseif (preg_match('/^\d{1,2}:\d{2}$/', $t)) {
+                                $timeObj = DateTime::createFromFormat('H:i', $t);
+                                if ($timeObj) {
+                                    $formatted = $timeObj->format('g:i');
+                                    $ampm = strtolower($timeObj->format('A'));
+                                }
+                            } else {
+                                $formatted = htmlspecialchars($t);
+                            }
 
-                                    echo htmlspecialchars($formatted);
-                                    if ($ampm === 'am' || $ampm === 'pm') {
-                                        echo '<span class="time-am-pm ' . $ampm . '">' . $ampm . '</span>';
-                                    }
-                                    ?>
+                            echo htmlspecialchars($formatted);
+                            if ($ampm === 'am' || $ampm === 'pm') {
+                                echo '<span class="time-am-pm ' . $ampm . '">' . $ampm . '</span>';
+                            }
+                            ?>
                                 </td>
                                 <td><?= htmlspecialchars($r['price_range']) ?></td>
                                 <td><span class="badge <?= match($r['status']) {
-                                    'Completed'=>'bg-success','In Progress'=>'bg-warning',
-                                    'Cancelled'=>'bg-danger',default=>'bg-secondary'}; ?>">
+                                    'Completed' => 'bg-success','In Progress' => 'bg-warning',
+                                    'Cancelled' => 'bg-danger',default => 'bg-secondary'
+                                }; ?>">
                                     <?= $r['status'] ?>
                                 </span></td>
                                 <td>
                                     <form method="post" class="d-flex gap-1">
                                         <input type="hidden" name="record_id" value="<?= $r['booking_id'] ?>">
                                         <select name="new_status" class="form-select form-select-sm">
-                                            <option value="Pending" <?= $r['status']==='Pending'?'selected':'' ?>>Pending</option>
-                                            <option value="In Progress" <?= $r['status']==='In Progress'?'selected':'' ?>>In Progress</option>
-                                            <option value="Completed" <?= $r['status']==='Completed'?'selected':'' ?>>Completed</option>
-                                            <option value="Cancelled" <?= $r['status']==='Cancelled'?'selected':'' ?>>Cancelled</option>
+                                            <option value="Pending" <?= $r['status'] === 'Pending' ? 'selected' : '' ?>>Pending</option>
+                                            <option value="In Progress" <?= $r['status'] === 'In Progress' ? 'selected' : '' ?>>In Progress</option>
+                                            <option value="Completed" <?= $r['status'] === 'Completed' ? 'selected' : '' ?>>Completed</option>
+                                            <option value="Cancelled" <?= $r['status'] === 'Cancelled' ? 'selected' : '' ?>>Cancelled</option>
                                         </select>
                                         <button type="submit" name="update_status" class="btn btn-primary btn-sm">Update</button>
                                     </form>
@@ -394,9 +410,9 @@ foreach ($services as $service) {
 
                 <?php
                 $total = count($records);
-                $completed = count(array_filter($records, fn($r) => $r['status'] === 'Completed'));
-                $in_progress = count(array_filter($records, fn($r) => $r['status'] === 'In Progress'));
-                $cancelled = count(array_filter($records, fn($r) => $r['status'] === 'Cancelled'));
+                $completed = count(array_filter($records, fn ($r) => $r['status'] === 'Completed'));
+                $in_progress = count(array_filter($records, fn ($r) => $r['status'] === 'In Progress'));
+                $cancelled = count(array_filter($records, fn ($r) => $r['status'] === 'Cancelled'));
                 ?>
                 <div class="summary-cards">
                     <div class="summary-card bg-info"><h5>Total</h5><p class="card-text"><?= $total ?></p></div>

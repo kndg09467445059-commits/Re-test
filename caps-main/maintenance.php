@@ -92,10 +92,12 @@ $services = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 <a href="dashboard.php" class="btn btn-secondary mb-3">← Back</a>
 
 <?php if (isset($_SESSION['success'])): ?>
-    <div class="alert alert-success"><?= $_SESSION['success']; unset($_SESSION['success']); ?></div>
+    <div class="alert alert-success"><?= $_SESSION['success'];
+    unset($_SESSION['success']); ?></div>
 <?php endif; ?>
 <?php if (isset($_SESSION['error'])): ?>
-    <div class="alert alert-danger"><?= $_SESSION['error']; unset($_SESSION['error']); ?></div>
+    <div class="alert alert-danger"><?= $_SESSION['error'];
+    unset($_SESSION['error']); ?></div>
 <?php endif; ?>
 
 <!-- Add Service Form -->
